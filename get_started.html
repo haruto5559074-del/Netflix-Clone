@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="CSS/get_started.css">
+<title>Netflix Pakistan</title>
+<style>
+   body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #000;
+    color: #fff;
+  }
+
+  /* HEADER */
+  header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 10vh;
+    background: #141414;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 1000;
+  }
+
+  .logo { height: 100px; }
+  .menu-icon, .search-icon, .profile-icon { cursor: pointer; font-size: 1.6em; color: #fff; }
+  .menu-icon:hover, .search-icon:hover, .profile-icon:hover { color: red; }
+  .profile-icon { margin-right: 2rem; }
+  .search-icon { margin-right: 1rem;
+  }
+
+
+  .search-box {
+    position: absolute;
+    right: 9rem;
+    top: 50%;
+    transform: translateY(-50%) scaleX(0);
+    transform-origin: right;
+    width: 32vw;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid red;
+    color: #fff;
+    padding: 5px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+    height: 5vh;
+  }
+  .search-box.active  {
+    transform: translateY(-50%) scaleX(1);
+    opacity: 1;
+    outline: none;
+  }
+.search-box.active > .search-icon {
+    transform: translateX(-2%);
+}
+  /* SIDEBAR */
+  .sidebar {
+    position: fixed;
+    left: -250px;
+    top: 0;
+    width: 250px;
+    height: 100%;
+    background: #181818;
+    padding-top: 70px;
+    transition: left 0.3s;
+    z-index: 999;
+  }
+  .sidebar.active { left: 0; }
+
+  .sidebar ul { list-style: none; padding: 0; margin: 0; }
+  .sidebar ul li {
+    padding: 15px 20px;
+    border-bottom: 1px solid #333;
+    position: relative; /* needed for submenu */
+  }
+  .sidebar ul li:hover { background: #333; }
+  .sidebar ul li a { color: #fff; text-decoration: none; display: block; }
+
+  /* SUBMENU SIDE SLIDE */
+  /* SUBMENU SIDE SLIDE */
+.submenu {
+  position: absolute;
+  top: 0;
+  left: 100%; /* opens to the right */
+  width: 20vw; /* fixed width */
+  max-height: 400px; /* limit height for scrolling */
+  background-color: #202020;
+  opacity: 0;
+  transform: translateX(-20px);
+  pointer-events: none;
+  transition: 0.3s;
+  overflow-y: auto; /* vertical scroll */
+   border-radius: 10px;
+  /* Hide scrollbar for Webkit browsers */
+  scrollbar-width: none; /* Firefox */
+    /* IE and -ms-overflow-style: none;Edge */
+}
+
+.submenu::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* show submenu on hover */
+.sidebar ul li:hover > .submenu {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+/* submenu items */
+.submenu li {
+  
+  border-bottom: 1px solid #920606;
+  padding: 0;
+}
+
+
+.submenu li:hover { 
+  background-color: #e50914; /* red hover */
+  color: #fff;
+  transform: scale(1.1);
+  box-shadow: 0 0 10px #e50914;
+  border-radius: 4px;
+}
+.submenu li a {
+  display: block;
+  padding: 0;        /* makes the whole area clickable */
+     /* same padding as li */
+  color: #fff;
+  text-decoration: none;
+  transition: 0.2s;
+
+}
+
+.submenu li:hover {
+  color: #fff;
+  transform: scale(1.05);
+  background-color: #e50914;
+}
+
+
+.submenu a:hover > li {
+    background-color: #e50914;
+}
+
+    
+  /* OVERLAY */
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    z-index: 998;
+  }
+  .overlay.active { display: block; }
+  .log {
+    height: 40vh;
+    width: 98vw;
+    display: flex;
+    justify-content: center;
+    margin-top: 5rem;
+
+  }
+  .content-row {
+    display: flex;
+    gap: 10px; /* space between items */
+    overflow-x: auto;
+    padding: 10px 20px;
+    scroll-behavior: smooth;
+  }
+
+  .content-row::-webkit-scrollbar {
+    height: 8px; /* horizontal scrollbar height */
+  }
+
+  .content-row::-webkit-scrollbar-thumb {
+    background: #e50914;
+    border-radius: 4px;
+  }
+
+  .content-item {
+    flex: 0 0 auto; /* prevent shrinking */
+    width: 200px;  /* fixed width for all items */
+    height: 300px; /* fixed height for all items */
+    border-radius: 5px;
+    overflow: hidden;
+    transition: transform 0.3s;
+  }
+
+  .content-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 5px;
+  }
+
+  .content-item:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+    border: 3px solid #e50914;
+  }
+
+  .section-title {
+    margin: 2rem 20px 1rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  #lst {
+    margin-bottom: 20px;
+  }
+ 
+</style>
+</head>
+<body>
+
+<header>
+  <div class="menu-icon" id="menuBtn">&#9776;</div>
+  <img src="Images/netflix_write-removebg-preview.png" class="logo">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <input type="text" id="searchBox" class="search-box" placeholder="Search...">
+    <span class="search-icon" id="searchIcon">&#128269;</span>
+    <span class="profile-icon"><a href="profile.html"><img style="height: 50px; width: 50px;" src="Images/images-removebg-preview.png" alt=""></a></span>
+  </div>
+</header>
+
+<div class="sidebar" id="sidebar">
+  <ul>
+    <li><a href="#">Home</a></li>
+
+    <li>
+      <a href="#">Movies</a>
+      <ul class="submenu">
+        <li><a href="#">Action</a></li>
+        <li><a href="#">Comedy</a></li>
+        <li><a href="#">Romance</a></li>
+        <li><a href="#">Horror</a></li>
+        <li><a href="#">Thriller</a></li>
+        <li><a href="#">Fantasy</a></li>
+        <li><a href="#">Mystery</a></li>
+        <li><a href="#">SC-FI</a></li>
+        <li><a href="#">Documentary</a></li>
+        <li><a href="#">Adventure</a></li>
+      </ul>
+    </li>
+
+    <li>
+      <a href="#">TV Shows</a>
+      <ul class="submenu">
+        <li><a href="#">Reality</a></li>
+        <li><a href="#">Drama</a></li>
+        <li><a href="#">Comedy</a></li>
+        <li><a href="#">Documentary</a></li>
+        <li><a href="#">Crime</a></li>
+        <li><a href="#">Historical</a></li>
+        <li><a href="#">Romanrtic</a></li>
+        <li><a href="#">Action</a></li>
+        <li><a href="#">Sci-Fi</a></li>
+        <li></li>
+      </ul>
+    </li>
+
+    <li>
+      <a href="#">Drama</a>
+      <ul class="submenu">
+        <li><a href="#">Love</a></li>
+        <li><a href="#">Crime</a></li>
+        <li><a href="#">Historical</a></li>
+        <li><a href="#">Psychological</a></li>
+        <li><a href="#">Thriller</a></li>
+        <li><a href="#">Family</a></li>
+        <li><a href="#">Medical</a></li>
+        <li><a href="#">Fantasy</a></li>
+        <li><a href="#">Adventure</a></li>
+        <li><a href="#">romantic</a></li>
+      </ul>
+    </li>
+
+    <li>
+      <a href="#">Kids Zone</a>
+      <ul class="submenu">
+        <li><a href="#">Cartoon</a></li>
+        <li><a href="#">Adventure</a></li>
+        <li><a href="#">Learning</a></li>
+      </ul>
+    </li>
+
+    <li>
+      <a href="#">Animations</a>
+      <ul class="submenu">
+  <li><a href="#">Love</a></li>
+  <li><a href="#">Crime</a></li>
+  <li><a href="#">Historical</a></li>
+  <li><a href="#">Psychological</a></li>
+  <li><a href="#">Thriller</a></li>
+  <li><a href="#">Family</a></li>
+  <li><a href="#">Medical</a></li>
+  <li><a href="#">Fantasy</a></li>
+  <li><a href="#">Adventure</a></li>
+  <li><a href="#">Romantic</a></li>
+
+        
+        
+      </ul>
+    </li>
+
+    <li><a href="#">My List</a></li>
+    <li><a href="#">Settings</a></li>
+  </ul>
+</div>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="log">
+    <video style="width: 1300px;  border-radius: 20px ;  height: 40vh;" src="Images/Netflix Intro 1080p (Highest Quality).mp4" loop autoplay muted></video>
+</div>
+<div class="section-title">Top Movies</div>
+<div class="content-row">
+    <!-- 20 movie items -->
+    <div class="content-item"><img src="Images/John_Wick_TeaserPoster.jpg" alt="John Wick" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/inception.jpg" alt="Inception" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/avengersendgame_lob_crd_05_0.jpg" alt="Avengers" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/interstellar.jpg" alt="Interstellar" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/jumanji.jpg" alt="Jumanji" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/matrix.jpg" alt="Matrix" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/gladiator.jpg" alt="Gladiator" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/Titanic_(1997_film)_poster.png" alt="Titanic" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/avator.jpg" alt="Avatar" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/the dark.jpg" alt="The Dark Knight" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/the father.png" alt="Pulp Fiction" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/passenger.jpg" alt="Forrest Gump" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/pk.jpg" alt="The Godfather" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/club.jpg" alt="The Shawshank Redemption" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/ted.jpg" alt="Fight Club" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/toy.jpg" alt="The Lion King" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/fast.jpg" alt="Toy Story" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/harry.jpg" alt="Frozen" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/frozen.jpg" alt="Harry Potter" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/hera.jpg" alt="Star Wars" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+</div>
+
+<!-- Series Section -->
+<div class="section-title">Top Series</div>
+<div class="content-row">
+    <!-- 20 series items -->
+    <div class="content-item"><img src="Images/strangerthings.cHJkLWVtcy1hc3NldHMvdHZzZWFzb24vNzUyMTFhOTktZTU4Ni00ODkyLWJlYjQtZTgxYTllZmU2OGM0LmpwZw==" alt="Stranger Things" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/breakingbad.jpg" alt="Breaking Bad" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/office.jpg" alt="The Office" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/friends.jpg" alt="Friends" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/thewicher.jpg" alt="The Witcher" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/lupin.jpg" alt="Lupin" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/dark.jpg" alt="Dark" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/the boys.jpg" alt="The Boys" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/vikings.jpg" alt="Vikings" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/squid.jpg" alt="Squid Game" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/money heist.jpg" alt="Money Heist" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/bridgerton.jpg" alt="Bridgerton" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/mandalorian.jpg" alt="The Mandalorian" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/wanda vision.jpg" alt="WandaVision" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/loki.jpg" alt="Loki" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/shadow.jpg" alt="Shadow and Bone" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/arcane.jpg" alt="Arcane" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/sense.jpg" alt="Sense8" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/sherlock.jpg" alt="Sherlock" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/game.jpg" alt="The Crown" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+</div>
+<!-- Drama Section -->
+<div class="section-title">Top Drama</div>
+<div class="content-row">
+    <!-- International Dramas -->
+    <div class="content-item"><img src="Images/the crown.jpg" alt="The Crown" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/bridgerton.jpg" alt="Bridgerton" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/peakyblinders.jpg" alt="Peaky Blinders" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/the handmaid tale.jpg" alt="The Handmaid's Tale" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/The_Queen's_Gambit_(miniseries).png" alt="Queen's Gambit" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/bettercall.jpg" alt="Better Call Saul" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/house of cards.jpg" alt="House of Cards" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/big little lies.jpg" alt="Big Little Lies" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/my strange hero.jpg" alt="The Good Doctor" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/grey anatomy.jpg" alt="Grey's Anatomy" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+
+    <!-- Turkish Dramas -->
+    <div class="content-item"><img src="Images/ertugrul.jpg" alt="Diriliş: Ertuğrul" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/manificent.jpg" alt="Magnificent Century" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/kara para ask.jpg" alt="Kara Para Aşk" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/faitj harbiye.jpg" alt="Fatih Harbiye" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/my demon.jpg" alt="Aşk-ı Memnu" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/yemin.jpg" alt="Yemin" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/cukur.jpg" alt="Çukur" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/endless love.jpg" alt="Medcezir" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/club.jpg" alt="Aşk Laftan Anlamaz" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/eve.jpg" alt="Erkenci Kuş" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+</div>
+<div class="section-title">Top Anime</div>
+<div class="content-row">
+    <!-- 20 anime items -->
+    <div class="content-item"><img src="Images/anime/apoyhecary.jpg" alt="John Wick" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/anime/ATTACK ON TITAN.jpg" alt="Inception" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/anime/BLACK CLOVER.jpg" alt="Avengers" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/anime/bleach.jpg" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/anime/CLASSROOM OF THE ELITE.jpg" alt="Jumanji" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/anime/Death_Note_Characters.jpg" alt="Matrix" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/anime/dragon ball.jpg" alt="Gladiator" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/anime/JUJUTSU KAISEN.jpg" alt="Titanic" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/anime/JUJUTSU KAISEN.jpg" alt="Avatar" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/anime/kake gurui.jpg" alt="The Dark Knight" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/anime/naruto.jpg" alt="Pulp Fiction" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/anime/ONE PIECE.jpg" alt="Forrest Gump" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/anime/suzume.jpg" alt="The Godfather" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/anime/wathering.jpg" alt="The Shawshank Redemption" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/anime/your name.jpg" alt="Fight Club" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/anime/LOOKISM.jpg" alt="The Lion King" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/anime/CASTALVANIA.jpg" alt="Toy Story" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/anime/garden of words.jpg" alt="Frozen" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/anime/orange.jpg" alt="Harry Potter" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/anime/pancreas.jpg" alt="Star Wars" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+</div>
+<div class="section-title">Cartoon For kids</div>
+<div class="content-row" id="lst">
+    <!-- 20 cartoon items -->
+    <div class="content-item"><img src="Images/cartoon/barbie.jpg" alt="John Wick" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/cartoon/batwheels.jpg" alt="Inception" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/cartoon/Beat_Bugs_poster.jpeg" alt="Avengers" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/cartoon/ben 10.jpg" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/cartoon/bheem.jpg" alt="Jumanji" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/cartoon/camp lazlo.jpg" alt="Matrix" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/cartoon/doraemon.jpg" alt="Gladiator" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/cartoon/green.jpg" alt="Titanic" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/cartoon/grizzy.jpg" alt="Avatar" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/cartoon/jurassic.jpg" alt="The Dark Knight" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/cartoon/kazoops.jpg" alt="Pulp Fiction" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/cartoon/lorax.jpg" alt="Forrest Gump" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/cartoon/masha and beer.jpg" alt="The Godfather" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/cartoon/mighty raju.jpg" alt="The Shawshank Redemption" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/cartoon/paw petrol.jpg" alt="Fight Club" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/cartoon/talking tom.jpg" alt="The Lion King" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/cartoon/thomas.jpg" alt="Toy Story" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/cartoon/twits.jpg" alt="Frozen" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/cartoon/tom and jerry.jpg" alt="Harry Potter" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+    <div class="content-item"><img src="Images/cartoon/unikitty.jpg" alt="Star Wars" style="width:100%; height:100%; border-radius:5px; object-fit:cover;"></div>
+</div>
+
+
+<script>
+  
+  // Sidebar toggle
+  const menuBtn = document.getElementById('menuBtn');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+
+  menuBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('active');
+    overlay.classList.toggle('active');
+  });
+
+  overlay.addEventListener('click', () => {
+    sidebar.classList.remove('active');
+    overlay.classList.remove('active');
+  });
+
+  // Search box toggle
+  const searchIcon = document.getElementById('searchIcon');
+  const searchBox = document.getElementById('searchBox');
+
+  searchIcon.addEventListener('click', () => {
+    searchBox.classList.toggle('active');
+    searchBox.focus();
+  });
+</script>
+
+</script>
+
+
+
+</body>
+<script src="JAVA SCRIPT/Netflix_slideshow_main.js"></script>
+</html>

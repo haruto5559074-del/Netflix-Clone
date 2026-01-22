@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="Images/download-removebg-preview.png">
+  <title>Netflix Pakistan - Watch TV Shows Online, Watch Movies Online</title>
+  <link rel="stylesheet" href="CSS/Netflix_CSS.css">
+</head>
+
+<body>
+  <div class="main">
+    <img src="Images/PK-en-20251103-TRIFECTA-perspective_c831197e-2712-421e-bc1a-639a46022a48_large.jpg" alt="">
+    <div class="Opa"></div>
+
+    <header class="Write">
+      <img src="Images/netflix_write-removebg-preview.png" alt="Netflix Logo">
+     <button><a href="Sign_in.html" target="_self" class="sign-btn">SIGN IN</a></button>
+
+    </header>
+
+    <div class="text">
+      <h1>Unlimited Movies, TV Shows & More</h1>
+      <h4>Started at Rs. 250. Cancel anytime.</h4>
+      <h4 class="Watch">Ready to watch? Enter your email to create or restart your membership.</h4>
+      <div>
+  <input type="email" id="email" placeholder="Email address" required>
+  <button class="Get" onclick="validateEmail()">Get Started &gt;</button> <br>
+  <span id="emailError" style="color:red; font-size:0.9em;"></span>
+</div>
+    </div>
+    <span class="line"></span>
+  </div>
+
+  <h1 class="tren">Trending Now..</h1>
+  <div class="movies">
+    <span><img src="Images/witcher1.png" alt=""></span>
+    <span><img src="Images/Stranger_things1.png" alt=""></span>
+    <span><img src="Images/SAIYAARA2.png" alt=""></span>
+    <span><img src="Images/SON2.png" alt=""></span>
+    <span><img src="Images/JOHN.png" alt=""></span>
+    <span><img src="Images/ALICE1.png" alt=""></span>
+    <span><img src="Images/WED2.png" alt=""></span>
+    <span><img src="Images/DARK4.png" alt=""></span>
+    <span><img src="Images/PEAKY.png" alt=""></span>
+    <span><img src="Images/VINCENZO.png" alt=""></span>
+  </div>
+
+  <div class="back">
+    <img style=" width: 90vw; height: 20vh; border-radius: 10px; " src="Images/back.jpg" alt="">
+    <div class="op"></div>
+    <h1 class="new">Discover your next favorites, plus new releases every week..</h1>
+  </div>
+
+  <h1 class="tren">More Reasons To join..</h1>
+  <div class="reason">
+    <span><img src="Images/televisiom.png" alt=""></span>
+    <span><img src="Images/watch.png" alt=""></span>
+    <span><img src="Images/watch every.png" alt=""></span>
+    <span><img src="Images/kids.png" alt=""></span>
+  </div>
+ <h1 class="tren">A Plan To Suit Your Needs..</h1>
+  <div class="price">
+    <span><img src="Images/mobile.png" alt=""></span>
+    <span><img src="Images/basic.png" alt=""></span>
+    <span><img src="Images/standard.png" alt=""></span>
+    <span><img src="Images/premium.png" alt=""></span>
+
+  </div>
+  <h1 class="freq">Frequently Asked Questions..</h1>
+
+  <!-- ✅ All FAQ Questions -->
+  <div class="faq-item">
+    <div class="faq-question"><span>What is Netflix?</span><span class="toggle-icon">+</span></div>
+    <div class="faq-answer">Netflix is a streaming service that offers a wide variety of award-winning TV shows, movies, anime, documentaries, and more on thousands of internet-connected devices. <br>
+You can watch as much as you want, whenever you want without a single commercial – all for one low monthly price. There's always something new to discover and new TV shows and movies are added every week!</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question"><span>How much does Netflix cost?</span><span class="toggle-icon">+</span></div>
+    <div class="faq-answer">Watch Netflix on your smartphone, tablet, Smart TV, laptop, or streaming device, all for one fixed monthly fee. Plans range from Rs 250 to Rs 1,100 a month. No extra costs, no contracts.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question"><span>Where can I watch?</span><span class="toggle-icon">+</span></div>
+    <div class="faq-answer">Watch anywhere, anytime. Sign in with your Netflix account to watch instantly on the web at netflix.com from your personal computer or on any internet-connected device that offers the Netflix app, including smart TVs, smartphones, tablets, streaming media players and game consoles. <br>
+
+You can also download your favorite shows with the iOS or Android app. Use downloads to watch while you're on the go and without an internet connection. Take Netflix with you anywhere.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question"><span>How do I cancel?</span><span class="toggle-icon">+</span></div>
+    <div class="faq-answer">Cancel anytime online. There are no contracts, no cancellation fees. Netflix is flexible. There are no pesky contracts and no commitments. You can easily cancel your account online in two clicks. There are no cancellation fees – start or stop your account anytime.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question"><span>What can I watch on Netflix?</span><span class="toggle-icon">+</span></div>
+    <div class="faq-answer">Netflix has an extensive library of feature films, documentaries, TV shows, anime, award-winning Netflix originals, and more. Watch as much as you want, anytime you want.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question"><span>Is Netflix good for kids?</span><span class="toggle-icon">+</span></div>
+    <div class="faq-answer">Yes! Netflix Kids provides parental controls and family-friendly entertainment. <br>
+      The Netflix Kids experience is included in your membership to give parents control while kids enjoy family-friendly TV shows and movies in their own space. <br>
+
+Kids profiles come with PIN-protected parental controls that let you restrict the maturity rating of content kids can watch and block specific titles you don’t want kids to see.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question"><span>Can I download shows to watch offline?</span><span class="toggle-icon">+</span></div>
+    <div class="faq-answer">Yes, many titles can be downloaded on mobile devices and tablets.</div>
+  </div>
+
+  <div class="faq-item" id="last">
+    <div class="faq-question"><span>Does Netflix offer subtitles or dubbing?</span><span class="toggle-icon">+</span></div>
+    <div class="faq-answer">Most content includes subtitles and dubbing options in multiple languages.</div>
+  </div>
+
+  <h3 id="rea">Ready to watch? Enter your email to create or restart your membership.</h3>
+  <div class="get">
+  <input type="email" id="email2" placeholder="Email address" required>
+  <button class="Get" onclick="validateEmailBottom()">Get Started &gt;</button> <br>
+  <span id="email2Error" style="color:red; font-size:0.9em;"></span>
+</div>
+
+  <div class="con">
+    <a href="contact.html" target="_self">Contact Us</a>
+  </div>
+
+  <footer>
+    <h2 class="foo">Copyright &copy; |  All rights Reserved.</h2>
+  </footer>
+
+
+</body>
+<script src="JAVA SCRIPT/Netflix_slideshow_main.js"></script>
+</html>
