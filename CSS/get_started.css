@@ -1,0 +1,212 @@
+ body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #000;
+    color: #fff;
+  }
+
+  /* HEADER */
+  header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 10vh;
+    background: #141414;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 1000;
+  }
+
+  .logo { height: 40px; }
+  .menu-icon, .search-icon, .profile-icon { cursor: pointer; font-size: 1.6em; color: #fff; }
+  .menu-icon:hover, .search-icon:hover, .profile-icon:hover { color: red; }
+  .profile-icon { margin-right: 2rem; }
+  .search-icon { margin-right: 1rem;
+  }
+
+
+  .search-box {
+    position: absolute;
+    right: 9rem;
+    top: 50%;
+    transform: translateY(-50%) scaleX(0);
+    transform-origin: right;
+    width: 32vw;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid red;
+    color: #fff;
+    padding: 5px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+    height: 5vh;
+  }
+  .search-box.active  {
+    transform: translateY(-50%) scaleX(1);
+    opacity: 1;
+    outline: none;
+  }
+.search-box.active > .search-icon {
+    transform: translateX(-2%);
+}
+  /* SIDEBAR */
+  .sidebar {
+    position: fixed;
+    left: -250px;
+    top: 0;
+    width: 250px;
+    height: 100%;
+    background: #181818;
+    padding-top: 70px;
+    transition: left 0.3s;
+    z-index: 999;
+  }
+  .sidebar.active { left: 0; }
+
+  .sidebar ul { list-style: none; padding: 0; margin: 0; }
+  .sidebar ul li {
+    padding: 15px 20px;
+    border-bottom: 1px solid #333;
+    position: relative; /* needed for submenu */
+  }
+  .sidebar ul li:hover { background: #333; }
+  .sidebar ul li a { color: #fff; text-decoration: none; display: block; }
+
+  /* SUBMENU SIDE SLIDE */
+  /* SUBMENU SIDE SLIDE */
+.submenu {
+  position: absolute;
+  top: 0;
+  left: 100%; /* opens to the right */
+  width: 20vw; /* fixed width */
+  max-height: 400px; /* limit height for scrolling */
+  background-color: #202020;
+  opacity: 0;
+  transform: translateX(-20px);
+  pointer-events: none;
+  transition: 0.3s;
+  overflow-y: auto; /* vertical scroll */
+   border-radius: 10px;
+  /* Hide scrollbar for Webkit browsers */
+  scrollbar-width: none; /* Firefox */
+    /* IE and -ms-overflow-style: none;Edge */
+}
+
+.submenu::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* show submenu on hover */
+.sidebar ul li:hover > .submenu {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+/* submenu items */
+.submenu li {
+  
+  border-bottom: 1px solid #920606;
+  padding: 0;
+}
+
+
+.submenu li:hover { 
+  background-color: #e50914; /* red hover */
+  color: #fff;
+  transform: scale(1.1);
+  box-shadow: 0 0 10px #e50914;
+  border-radius: 4px;
+}
+.submenu li a {
+  display: block;
+  padding: 0;        /* makes the whole area clickable */
+     /* same padding as li */
+  color: #fff;
+  text-decoration: none;
+  transition: 0.2s;
+
+}
+
+.submenu li:hover {
+  color: #fff;
+  transform: scale(1.05);
+  background-color: #e50914;
+}
+
+
+.submenu a:hover > li {
+    background-color: #e50914;
+}
+
+    
+  /* OVERLAY */
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    z-index: 998;
+  }
+  .overlay.active { display: block; }
+  .log {
+    height: 40vh;
+    width: 98vw;
+    display: flex;
+    justify-content: center;
+    margin-top: 5rem;
+
+  }
+  .content-row {
+    display: flex;
+    gap: 10px; /* space between items */
+    overflow-x: auto;
+    padding: 10px 20px;
+    scroll-behavior: smooth;
+  }
+
+  .content-row::-webkit-scrollbar {
+    height: 8px; /* horizontal scrollbar height */
+  }
+
+  .content-row::-webkit-scrollbar-thumb {
+    background: #e50914;
+    border-radius: 4px;
+  }
+
+  .content-item {
+    flex: 0 0 auto; /* prevent shrinking */
+    width: 200px;  /* fixed width for all items */
+    height: 300px; /* fixed height for all items */
+    border-radius: 5px;
+    overflow: hidden;
+    transition: transform 0.3s;
+  }
+
+  .content-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 5px;
+  }
+
+  .content-item:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+    border: 3px solid #e50914;
+  }
+
+  .section-title {
+    margin: 2rem 20px 1rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  #lst {
+    margin-bottom: 20px;
+  }
